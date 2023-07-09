@@ -7,11 +7,10 @@ using MasterServer.Common;
 
 namespace MasterServer.ServerSide
 {
-    internal static class Server
+    static class Server
     {
         private static int Port { get; set; }
         public static readonly Dictionary<int, Client> Clients = new();
-        public static readonly Dictionary<int, Client> WaitingPlayers = new();
         public delegate void PacketHandler(int _fromClient, Packet _packet);
         public static Dictionary<int, PacketHandler> PacketHandlers;
 
@@ -55,7 +54,7 @@ namespace MasterServer.ServerSide
         {
             PacketHandlers = new Dictionary<int, PacketHandler>()
             {
-                { (int)ClientPackets.LoginReceived, ServerHandle.LoginReceived },
+                { (int)ClientPackets.Login, ServerHandle.LoginReceived },
             };
             Console.WriteLine("Initialized packets.");
         }

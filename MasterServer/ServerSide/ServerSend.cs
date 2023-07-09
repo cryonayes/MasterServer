@@ -11,15 +11,22 @@ namespace MasterServer.ServerSide
         }
 
         #region Packets
+        public static void Welcome(int _toClient, string _message)
+        {
+            using var _packet = new Packet((int)ServerPackets.Welcome);
+            _packet.Write(_message);
+            SendTcpData(_toClient, _packet);
+        }
+        
         public static void LoginFailed(int _toClient)
         {
             using var _packet = new Packet((int)ServerPackets.LoginFailed);
-            
             SendTcpData(_toClient, _packet);
         }
-        public static void LoginSuccess(int _toClient, string token)
+        public static void LoginSuccess(int _toClient, string username, string token)
         {
             using var _packet = new Packet((int)ServerPackets.LoginSuccess);
+            _packet.Write(username);
             _packet.Write(token);
             
             SendTcpData(_toClient, _packet);

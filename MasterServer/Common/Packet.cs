@@ -5,20 +5,6 @@ using System.Text;
 
 namespace MasterServer.Common
 {
-    /// <summary>Sent from server to client.</summary>
-    public enum ServerPackets
-    {
-        Welcome = 1,
-        LoginSuccess,
-        LoginFailed
-    }
-
-    /// <summary>Sent from client to server.</summary>
-    public enum ClientPackets
-    {
-        LoginReceived = 1,
-    }
-
     public sealed class Packet : IDisposable
     {
         private List<byte> _buffer;

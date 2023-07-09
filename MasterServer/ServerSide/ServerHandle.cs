@@ -10,12 +10,11 @@ namespace MasterServer.ServerSide
             var _username = _packet.ReadString();
             var _password = _packet.ReadString();
 
-            // Make the database validation then check if user is logged in
             var _token = LoginHelper.HandleLogin(_username, _password);
             if (_token == "")
                 ServerSend.LoginFailed(_fromClient);
             else
-                ServerSend.LoginSuccess(_fromClient, _token);
+                ServerSend.LoginSuccess(_fromClient, _username, _token);
         }
     }
 }
