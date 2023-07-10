@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using MasterServer.ClientSide;
 using MasterServer.Database;
 using MasterServer.ServerSide;
 using MasterServer.Threading;
@@ -13,15 +14,28 @@ namespace MasterServer
         private static void Main()
         {
             _isRunning = true;
-
             MongoCrud.Connect(Globals.MongoUri, Globals.DatabaseName, Globals.CollectionName);
             
             var _mainThread = new Thread(MainThread);
             _mainThread.Start();
 
             Server.Start(1337);
+            LobbyManager.GameServerNotifyLobby += GameServerNotifyLobby;
+            LobbyManager.LobbyIsFulled += NotifyLobbyPlayers;
         }
 
+        static void GameServerNotifyLobby(object _sender, LobbyManager.Lobby _lobby)
+        {
+            // Lobby'nin kaç kişilik olduğu ve ID'si haber edilecek
+            Console.WriteLine($"Yeni lobby oluşturuldu, GameServer'a haber veriliyor ID: {_lobby.GetId()}");
+        }
+
+        static void NotifyLobbyPlayers(object _sender, LobbyManager.Lobby _lobby)
+        {
+            foreach (var _client in _lobby.GetPlayers())
+                ServerSend.GoJoinLobby(_client);
+        }
+        
         private static void MainThread()
         {
             Console.WriteLine($"Main thread started. Running at {Constants.TicksPerSec} ticks per second.");

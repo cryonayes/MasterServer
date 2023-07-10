@@ -6,7 +6,7 @@ using MasterServer.Threading;
 
 namespace MasterServer.ClientSide;
 
- public class ClientConn
+public class ClientConn
 {
     public TcpClient Socket;
 

@@ -5,12 +5,14 @@ public enum ServerPackets
 {
     Welcome = 1,
     LoginSuccess,
-    LoginFailed
+    LoginFailed,
+    WaitingLobby,
+    GoJoinLobby
 }
 
 // Sent from client to server.
 public enum ClientPackets
 {
     Login = 1,
-    PlayerMovement
+    JoinLobby
 }

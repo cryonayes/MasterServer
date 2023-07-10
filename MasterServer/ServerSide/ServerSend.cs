@@ -23,12 +23,28 @@ namespace MasterServer.ServerSide
             using var _packet = new Packet((int)ServerPackets.LoginFailed);
             SendTcpData(_toClient, _packet);
         }
-        public static void LoginSuccess(int _toClient, string username, string token)
+        public static void LoginSuccess(int _toClient, string _username, string _token)
         {
             using var _packet = new Packet((int)ServerPackets.LoginSuccess);
-            _packet.Write(username);
-            _packet.Write(token);
+            _packet.Write(_username);
+            _packet.Write(_token);
+            _packet.Write(Globals.GameServerIp);
+            _packet.Write(Globals.GameServerPort);
             
+            SendTcpData(_toClient, _packet);
+        }
+
+        public static void WaitForLobby(int _toClient, string _lobbyId)
+        {
+            using var _packet = new Packet((int)ServerPackets.WaitingLobby);
+            _packet.Write(_lobbyId);
+            
+            SendTcpData(_toClient, _packet);
+        }
+
+        public static void GoJoinLobby(int _toClient)
+        {
+            using var _packet = new Packet((int)ServerPackets.GoJoinLobby);
             SendTcpData(_toClient, _packet);
         }
         

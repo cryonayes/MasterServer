@@ -1,4 +1,6 @@
-﻿using MasterServer.Common;
+﻿using System;
+using MasterServer.ClientSide;
+using MasterServer.Common;
 using MasterServer.Database.Helpers;
 
 namespace MasterServer.ServerSide
@@ -15,6 +17,13 @@ namespace MasterServer.ServerSide
                 ServerSend.LoginFailed(_fromClient);
             else
                 ServerSend.LoginSuccess(_fromClient, _username, _token);
+        }
+
+        public static void LobbyRequestReceived(int _fromClient, Packet _packet)
+        {
+            var _lobby = LobbyManager.GetInstance().GetOrCreateLobby();
+            _lobby.AddPlayer(_fromClient);
+            ServerSend.WaitForLobby(_fromClient, _lobby.GetId());
         }
     }
 }

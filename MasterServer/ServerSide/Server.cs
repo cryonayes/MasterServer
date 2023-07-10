@@ -55,6 +55,7 @@ namespace MasterServer.ServerSide
             PacketHandlers = new Dictionary<int, PacketHandler>()
             {
                 { (int)ClientPackets.Login, ServerHandle.LoginReceived },
+                { (int)ClientPackets.JoinLobby, ServerHandle.LobbyRequestReceived },
             };
             Console.WriteLine("Initialized packets.");
         }
