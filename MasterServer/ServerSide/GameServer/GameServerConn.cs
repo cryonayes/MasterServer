@@ -39,7 +39,8 @@ public class GameServerConn
     {
         _packetHandlers = new Dictionary<int, PacketHandler>
         {
-            { (int)GameServerToMaster.Welcome, GameServerHandle.Welcome }
+            { (int)GameServerToMaster.Welcome, GameServerHandle.Welcome },
+            { (int)GameServerToMaster.LobbyReady, GameServerHandle.LobbyIsReady }
         };
     }
 

@@ -4,7 +4,7 @@ using MasterServer.ServerSide.Lobby;
 
 namespace MasterServer.ServerSide.MasterServer
 {
-    internal abstract class ServerHandle
+    internal abstract class ClientHandle
     {
         public static void LoginReceived(int _fromClient, Packet _packet)
         {
@@ -13,16 +13,17 @@ namespace MasterServer.ServerSide.MasterServer
 
             var _token = LoginHelper.HandleLogin(_username, _password);
             if (_token == "")
-                ServerSend.LoginFailed(_fromClient);
+                ClientSend.LoginFailed(_fromClient);
             else
-                ServerSend.LoginSuccess(_fromClient, _username, _token);
+                ClientSend.LoginSuccess(_fromClient, _username, _token);
         }
 
         public static void LobbyRequestReceived(int _fromClient, Packet _packet)
         {
             var _lobby = LobbyManager.GetInstance().GetOrCreateLobby();
             _lobby.AddPlayer(_fromClient);
-            ServerSend.WaitForLobby(_fromClient, _lobby.GetId());
+            
+            //ClientSend.JoinToLobby(_fromClient, _lobby.GetId());
         }
     }
 }

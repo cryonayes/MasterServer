@@ -32,7 +32,7 @@ public class ClientConn
         _receiveBuffer = new byte[Client.DataBufferSize];
 
         _stream.BeginRead(_receiveBuffer, 0, Client.DataBufferSize, ReceiveCallback, null);
-        ServerSend.Welcome(_id, "Welcome to the MasterServer!");
+        ClientSend.Welcome(_id, "Welcome to the MasterServer!");
     }
 
     public void SendData(Packet _packet)

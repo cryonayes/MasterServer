@@ -2,7 +2,7 @@
 
 namespace MasterServer.ServerSide.MasterServer
 {
-    internal abstract class ServerSend
+    internal abstract class ClientSend
     {
         private static void SendTcpData(int _toClient, Packet _packet)
         {
@@ -34,20 +34,14 @@ namespace MasterServer.ServerSide.MasterServer
             SendTcpData(_toClient, _packet);
         }
 
-        public static void WaitForLobby(int _toClient, string _lobbyId)
+        public static void JoinToLobby(int _toClient, string _lobbyId)
         {
-            using var _packet = new Packet((int)MasterToClient.WaitingLobby);
+            using var _packet = new Packet((int)MasterToClient.GoJoinLobby);
             _packet.Write(_lobbyId);
             
             SendTcpData(_toClient, _packet);
         }
 
-        public static void GoJoinLobby(int _toClient)
-        {
-            using var _packet = new Packet((int)MasterToClient.GoJoinLobby);
-            SendTcpData(_toClient, _packet);
-        }
-        
         #endregion
     }
 }

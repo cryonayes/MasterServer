@@ -36,23 +36,11 @@ namespace MasterServer
             _mainThread.Start();
 
             Server.Start(1337);
-            LobbyManager.GameServerNotifyLobby += GameServerNotifyLobby;
-            LobbyManager.LobbyIsFulled += NotifyLobbyPlayers;
         }
 
-        static void GameServerNotifyLobby(object _sender, LobbyManager.Lobby _lobby)
-        {
-            // Lobby'nin kaç kişilik olduğu ve ID'si haber edilecek
-            GameServerSend.SendLobbyInfo(_lobby.GetId(), _lobby.Capacity);
-            Console.WriteLine($"Yeni lobby oluşturuldu, GameServer'a haber veriliyor ID: {_lobby.GetId()}");
-        }
+        // Yeni oluşturulan lobby'yi game server'a haber et
 
-        static void NotifyLobbyPlayers(object _sender, LobbyManager.Lobby _lobby)
-        {
-            foreach (var _client in _lobby.GetPlayers())
-                ServerSend.GoJoinLobby(_client);
-        }
-        
+
         private static void MainThread()
         {
             Console.WriteLine($"Main thread started. Running at {Constants.TicksPerSec} ticks per second.");

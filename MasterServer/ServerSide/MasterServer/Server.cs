@@ -52,10 +52,10 @@ namespace MasterServer.ServerSide.MasterServer
 
         private static void InitializeServerData()
         {
-            PacketHandlers = new Dictionary<int, PacketHandler>()
+            PacketHandlers = new Dictionary<int, PacketHandler>
             {
-                { (int)ClientToMaster.Login, ServerHandle.LoginReceived },
-                { (int)ClientToMaster.JoinLobby, ServerHandle.LobbyRequestReceived },
+                { (int)ClientToMaster.Login, ClientHandle.LoginReceived },
+                { (int)ClientToMaster.LobbyRequest, ClientHandle.LobbyRequestReceived },
             };
             Console.WriteLine("Initialized packets.");
         }

@@ -1,8 +1,8 @@
 using MasterServer.Common;
+using MasterServer.ServerSide.Lobby;
 
 namespace MasterServer.ServerSide.GameServer;
 
-// GameServer'a veri göndermek için kullanılacak fonskiyonlar
 public static class GameServerSend
 {
     private static void SendTcpData(Packet _packet)
@@ -11,11 +11,12 @@ public static class GameServerSend
         GameServerConn.Instance.SendData(_packet);
     }
 
-    public static void SendLobbyInfo(string _lobbyId, int _capacity)
+    public static void GameServerNotifyLobby(LobbyManager.Lobby _lobby)
     {
         using var _packet = new Packet();
-        _packet.Write(_lobbyId);
-        _packet.Write(_capacity);
+        
+        _packet.Write(_lobby.GetId());
+        _packet.Write(_lobby.Capacity);
 
         SendTcpData(_packet);
     }
