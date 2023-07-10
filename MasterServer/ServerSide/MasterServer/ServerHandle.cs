@@ -1,9 +1,8 @@
-﻿using System;
-using MasterServer.ClientSide;
-using MasterServer.Common;
+﻿using MasterServer.Common;
 using MasterServer.Database.Helpers;
+using MasterServer.ServerSide.Lobby;
 
-namespace MasterServer.ServerSide
+namespace MasterServer.ServerSide.MasterServer
 {
     internal abstract class ServerHandle
     {

@@ -12,10 +12,7 @@ namespace MasterServer.Threading
         public static void ExecuteOnMainThread(Action _action)
         {
             if (_action == null)
-            {
-                Console.WriteLine("No action to execute on main thread!");
                 return;
-            }
 
             lock (executeOnMainThread)
             {

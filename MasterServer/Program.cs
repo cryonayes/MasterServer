@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
-using MasterServer.ClientSide;
 using MasterServer.Database;
-using MasterServer.ServerSide;
+using MasterServer.ServerSide.GameServer;
+using MasterServer.ServerSide.Lobby;
+using MasterServer.ServerSide.MasterServer;
 using MasterServer.Threading;
 
 namespace MasterServer
@@ -11,8 +12,23 @@ namespace MasterServer
     {
         private static bool _isRunning;
 
-        private static void Main()
+        public static void Main()
         {
+            GameServerConn.CreateInstance(Globals.GameServerIp, Globals.GameServerPort);
+            
+            GameServerConn.Instance.OnConnected += (_sender, _args) =>
+            {
+                Console.WriteLine("Connected to the Game Server!");
+            };
+            
+            GameServerConn.Instance.OnDisconnected += (_sender, _args) =>
+            {
+                Console.WriteLine("Disconnected from the Game Server!");
+            };
+            
+            GameServerConn.Instance.Start();
+
+
             _isRunning = true;
             MongoCrud.Connect(Globals.MongoUri, Globals.DatabaseName, Globals.CollectionName);
             
@@ -27,6 +43,7 @@ namespace MasterServer
         static void GameServerNotifyLobby(object _sender, LobbyManager.Lobby _lobby)
         {
             // Lobby'nin kaç kişilik olduğu ve ID'si haber edilecek
+            GameServerSend.SendLobbyInfo(_lobby.GetId(), _lobby.Capacity);
             Console.WriteLine($"Yeni lobby oluşturuldu, GameServer'a haber veriliyor ID: {_lobby.GetId()}");
         }
 

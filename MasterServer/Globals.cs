@@ -1,12 +1,12 @@
 ﻿namespace MasterServer
 {
-    static class Constants
+    internal static class Constants
     {
         public const int TicksPerSec = 10;
         public const float MsPerTick = 1000f / TicksPerSec;
     }
 
-    static class Globals
+    internal static class Globals
     {
         public static string GameServerIp = "127.0.0.1";
         public static int GameServerPort = 1338;        

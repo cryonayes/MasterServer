@@ -1,6 +1,6 @@
 ﻿using MasterServer.Common;
 
-namespace MasterServer.ServerSide
+namespace MasterServer.ServerSide.MasterServer
 {
     internal abstract class ServerSend
     {
@@ -13,19 +13,19 @@ namespace MasterServer.ServerSide
         #region Packets
         public static void Welcome(int _toClient, string _message)
         {
-            using var _packet = new Packet((int)ServerPackets.Welcome);
+            using var _packet = new Packet((int)MasterToClient.Welcome);
             _packet.Write(_message);
             SendTcpData(_toClient, _packet);
         }
         
         public static void LoginFailed(int _toClient)
         {
-            using var _packet = new Packet((int)ServerPackets.LoginFailed);
+            using var _packet = new Packet((int)MasterToClient.LoginFailed);
             SendTcpData(_toClient, _packet);
         }
         public static void LoginSuccess(int _toClient, string _username, string _token)
         {
-            using var _packet = new Packet((int)ServerPackets.LoginSuccess);
+            using var _packet = new Packet((int)MasterToClient.LoginSuccess);
             _packet.Write(_username);
             _packet.Write(_token);
             _packet.Write(Globals.GameServerIp);
@@ -36,7 +36,7 @@ namespace MasterServer.ServerSide
 
         public static void WaitForLobby(int _toClient, string _lobbyId)
         {
-            using var _packet = new Packet((int)ServerPackets.WaitingLobby);
+            using var _packet = new Packet((int)MasterToClient.WaitingLobby);
             _packet.Write(_lobbyId);
             
             SendTcpData(_toClient, _packet);
@@ -44,7 +44,7 @@ namespace MasterServer.ServerSide
 
         public static void GoJoinLobby(int _toClient)
         {
-            using var _packet = new Packet((int)ServerPackets.GoJoinLobby);
+            using var _packet = new Packet((int)MasterToClient.GoJoinLobby);
             SendTcpData(_toClient, _packet);
         }
         

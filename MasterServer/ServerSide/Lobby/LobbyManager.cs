@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MasterServer.ServerSide;
+namespace MasterServer.ServerSide.Lobby;
 
 public class LobbyManager
 {
@@ -45,24 +45,24 @@ public class LobbyManager
     {
         private readonly string _lobbyId;
         private readonly List<int> _players;
-        private readonly int _capacity;
+        public readonly int Capacity;
 
         public Lobby(int _maxPlayers)
         {
             _players = new List<int>();
             _lobbyId = Guid.NewGuid().ToString();
-            _capacity = _maxPlayers;
+            Capacity = _maxPlayers;
         }
 
         public bool Available()
         {
-            return _capacity > _players.Count;
+            return Capacity > _players.Count;
         }
         
         public void AddPlayer(int _playerId)
         {
             _players.Add(_playerId);
-            if (_capacity == _players.Count)
+            if (Capacity == _players.Count)
                 OnLobbyIsFulled(this);
         }
 

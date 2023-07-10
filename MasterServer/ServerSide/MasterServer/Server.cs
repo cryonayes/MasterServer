@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using MasterServer.ClientSide;
 using MasterServer.Common;
 
-namespace MasterServer.ServerSide
+namespace MasterServer.ServerSide.MasterServer
 {
     static class Server
     {
@@ -54,8 +54,8 @@ namespace MasterServer.ServerSide
         {
             PacketHandlers = new Dictionary<int, PacketHandler>()
             {
-                { (int)ClientPackets.Login, ServerHandle.LoginReceived },
-                { (int)ClientPackets.JoinLobby, ServerHandle.LobbyRequestReceived },
+                { (int)ClientToMaster.Login, ServerHandle.LoginReceived },
+                { (int)ClientToMaster.JoinLobby, ServerHandle.LobbyRequestReceived },
             };
             Console.WriteLine("Initialized packets.");
         }

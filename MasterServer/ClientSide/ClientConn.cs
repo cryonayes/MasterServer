@@ -2,6 +2,7 @@ using System;
 using System.Net.Sockets;
 using MasterServer.Common;
 using MasterServer.ServerSide;
+using MasterServer.ServerSide.MasterServer;
 using MasterServer.Threading;
 
 namespace MasterServer.ClientSide;
