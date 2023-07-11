@@ -23,7 +23,7 @@ namespace MasterServer.ServerSide.MasterServer
             var _lobby = LobbyManager.GetInstance().GetOrCreateLobby();
             _lobby.AddPlayer(_fromClient);
             
-            //ClientSend.JoinToLobby(_fromClient, _lobby.GetId());
+            ClientSend.JoinToLobby(_fromClient, _lobby.GetId());
         }
     }
 }

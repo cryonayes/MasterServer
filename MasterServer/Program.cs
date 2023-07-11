@@ -14,7 +14,7 @@ namespace MasterServer
 
         public static void Main()
         {
-            GameServerConn.CreateInstance(Globals.GameServerIp, Globals.GameServerPort);
+            GameServerConn.CreateInstance(Globals.GameServerIp, Globals.GameServerMasterPort);
             
             GameServerConn.Instance.OnConnected += (_sender, _args) =>
             {

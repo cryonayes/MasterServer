@@ -29,7 +29,7 @@ namespace MasterServer.ServerSide.MasterServer
             _packet.Write(_username);
             _packet.Write(_token);
             _packet.Write(Globals.GameServerIp);
-            _packet.Write(Globals.GameServerPort);
+            _packet.Write(Globals.GameServerClientPort);
             
             SendTcpData(_toClient, _packet);
         }
