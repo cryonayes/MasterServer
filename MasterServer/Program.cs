@@ -13,19 +13,31 @@ namespace MasterServer
 
         public static void Main()
         {
-            GameServerConn.CreateInstance(Globals.GameServerIp, Globals.GameServerPort);
-            
-            GameServerConn.Instance.OnConnected += (_sender, _args) =>
+            while (true)
             {
-                Console.WriteLine("Connected to the Game Server!");
-            };
-            
-            GameServerConn.Instance.OnDisconnected += (_sender, _args) =>
-            {
-                Console.WriteLine("Disconnected from the Game Server!");
-            };
-            
-            GameServerConn.Instance.Start();
+                try
+                {
+                    GameServerConn.CreateInstance(Globals.GameServerIp, Globals.GameServerPort);
+
+                    GameServerConn.Instance.OnConnected += (_sender, _args) =>
+                    {
+                        Console.WriteLine("Connected to the Game Server!");
+                    };
+
+                    GameServerConn.Instance.OnDisconnected += (_sender, _args) =>
+                    {
+                        Console.WriteLine("Disconnected from the Game Server!");
+                    };
+
+                    GameServerConn.Instance.Start();
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                    Console.WriteLine("Retrying connection...");
+                }
+            }
             
             _isRunning = true;
             MongoCrud.Connect(Globals.MongoUri, Globals.DatabaseName, Globals.CollectionName);
