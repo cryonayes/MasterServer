@@ -13,7 +13,7 @@ public static class GameServerSend
 
     public static void GameServerNotifyLobby(LobbyManager.Lobby _lobby)
     {
-        using var _packet = new Packet();
+        using var _packet = new Packet((int)MasterToGameServer.LobbyInfo);
         
         _packet.Write(_lobby.GetId());
         _packet.Write(_lobby.Capacity);

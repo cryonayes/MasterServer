@@ -39,8 +39,10 @@ public class GameServerConn
     {
         _packetHandlers = new Dictionary<int, PacketHandler>
         {
-            { (int)GameServerToMaster.Welcome, GameServerHandle.Welcome },
-            { (int)GameServerToMaster.LobbyReady, GameServerHandle.LobbyIsReady }
+            { (int)GameServerToClient.Welcome, GameServerHandle.Welcome },
+            { (int)GameServerToMaster.LobbyReady, GameServerHandle.LobbyIsReady },
+            { (int)GameServerToMaster.PlayerConnected, GameServerHandle.PlayerConnected },
+            { (int)GameServerToMaster.PlayerDisconnected, GameServerHandle.PlayerDisconnected },
         };
     }
 
@@ -61,39 +63,35 @@ public class GameServerConn
     private bool HandleData(byte[] _data)
     {
         var _packetLength = 0;
-
+        
         _receivedData.SetBytes(_data);
-
         if (_receivedData.UnreadLength() >= 4)
         {
             _packetLength = _receivedData.ReadInt();
             if (_packetLength <= 0)
-                return true; // Reset receivedData instance to allow it to be reused
+                return true; 
         }
 
         while (_packetLength > 0 && _packetLength <= _receivedData.UnreadLength())
         {
-            // While packet contains data AND packet data length doesn't exceed the length of the packet we're reading
             var _packetBytes = _receivedData.ReadBytes(_packetLength);
             ThreadManager.ExecuteOnMainThread(() =>
             {
                 using var _packet = new Packet(_packetBytes);
                 var _packetId = _packet.ReadInt();
-                _packetHandlers[_packetId](_packet); // Call appropriate method to handle the packet
+                _packetHandlers[_packetId](_packet);
             });
 
-            _packetLength = 0; // Reset packet length
+            _packetLength = 0;
             if (_receivedData.UnreadLength() < 4) continue;
-            // If client's received data contains another packet
             _packetLength = _receivedData.ReadInt();
             if (_packetLength <= 0)
-                return true; // Reset receivedData instance to allow it to be reused
+            {
+                return true;
+            }
         }
 
-        if (_packetLength <= 1)
-            return true; // Reset receivedData instance to allow it to be reused
-
-        return false;
+        return _packetLength <= 1;
     }
     
     public void SendData(Packet _packet)

@@ -6,24 +6,34 @@ public enum MasterToClient
     Welcome = 1,
     LoginSuccess,
     LoginFailed,
+    RegisterSuccess,
+    RegisterFailed,
     GoJoinLobby,
+    ScoreTable
 }
 
-// Sent from client to master server.
 public enum ClientToMaster
 {
-    Login = 1,
-    LobbyRequest
+    Login = 10,
+    Register,
+    LobbyRequest,
+    OnFinishLine
 }
 
-// Sent from game server to master server
+public enum GameServerToClient
+{
+    Welcome = 20,
+}
+
 public enum GameServerToMaster
 {
-    Welcome = 1,
-    LobbyReady
+    Welcome = 40,
+    LobbyReady,
+    PlayerConnected,
+    PlayerDisconnected
 }
 
 public enum MasterToGameServer
 {
-    LobbyInfo = 1
+    LobbyInfo = 50
 }

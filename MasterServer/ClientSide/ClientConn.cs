@@ -1,7 +1,6 @@
 using System;
 using System.Net.Sockets;
 using MasterServer.Common;
-using MasterServer.ServerSide;
 using MasterServer.ServerSide.MasterServer;
 using MasterServer.Threading;
 
@@ -40,7 +39,7 @@ public class ClientConn
         try
         {
             if (Socket != null)
-                _stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null); // Send data to appropriate client
+                _stream.BeginWrite(_packet.ToArray(), 0, _packet.Length(), null, null);
         }
         catch (Exception _ex)
         {
@@ -91,20 +90,19 @@ public class ClientConn
             {
                 using var _packet = new Packet(_packetBytes);
                 var _packetId = _packet.ReadInt();
-                Server.PacketHandlers[_packetId](_id, _packet); // Call appropriate method to handle the packet
+                Server.PacketHandlers[_packetId](_id, _packet);
             });
 
-            _packetLength = 0; // Reset packet length
+            _packetLength = 0;
             if (_receivedData.UnreadLength() < 4) continue;
             _packetLength = _receivedData.ReadInt();
             if (_packetLength <= 0)
             {
-                return true; // Reset receivedData instance to allow it to be reused
+                return true;
             }
         }
 
         return _packetLength <= 1;
-        // Reset receivedData instance to allow it to be reused
     }
 
     public void Disconnect()

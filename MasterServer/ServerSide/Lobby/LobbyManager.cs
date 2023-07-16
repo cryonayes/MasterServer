@@ -10,11 +10,11 @@ namespace MasterServer.ServerSide.Lobby;
 public class LobbyManager
 {
     private static LobbyManager _instance;
-    private readonly List<Lobby> _lobbies;
+    public readonly List<Lobby> Lobbies;
     
     private LobbyManager()
     {
-        _lobbies = new List<Lobby>();
+        Lobbies = new List<Lobby>();
     }
     
     public static LobbyManager GetInstance()
@@ -22,14 +22,14 @@ public class LobbyManager
         _instance ??= new LobbyManager();
         return _instance;
     }
-    
+
     public Lobby GetOrCreateLobby()
     {
-        foreach (var _lobby in _lobbies.Where(_lobby => _lobby.Available()))
+        foreach (var _lobby in Lobbies.Where(_lobby => _lobby.Available()))
             return _lobby;
-        _lobbies.Add(new Lobby(2));
-        GameServerSend.GameServerNotifyLobby(_lobbies[^1]);
-        return _lobbies[^1];
+        Lobbies.Add(new Lobby(2));
+        GameServerSend.GameServerNotifyLobby(Lobbies[^1]);
+        return Lobbies[^1];
     }
 
     private void OnLobbyFull(Lobby _lobby)
@@ -37,12 +37,24 @@ public class LobbyManager
         var _players = _lobby.GetPlayers();
         foreach (var _player in _players)
             ClientSend.JoinToLobby(_player, _lobby.GetId());
-        _lobbies.Remove(_lobby);
     }
 
+    public Lobby GetLobyWithPlayerId(int id)
+    {
+        foreach (var _lobby in Lobbies)
+        {
+            foreach (var _player in _lobby.GetPlayers())
+            {
+                if (_player == id)
+                    return _lobby;
+            }
+        }
+        return null!;
+    }
+    
     public Lobby GetLobbyById(string _lobbyId)
     {
-        return _lobbies.FirstOrDefault(_lobby => _lobby.GetId() == _lobbyId);
+        return Lobbies.FirstOrDefault(_lobby => _lobby.GetId() == _lobbyId);
     }
     
     public class Lobby
@@ -50,6 +62,7 @@ public class LobbyManager
         private readonly string _lobbyId;
         private readonly List<int> _players;
         public readonly int Capacity;
+        public bool PlayerWon;
 
         public Lobby(int _maxPlayers)
         {

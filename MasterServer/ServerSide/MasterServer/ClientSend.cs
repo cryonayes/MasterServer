@@ -1,4 +1,6 @@
-﻿using MasterServer.Common;
+﻿using System.Collections.Generic;
+using MasterServer.Common;
+using MongoDB.Bson;
 
 namespace MasterServer.ServerSide.MasterServer
 {
@@ -29,8 +31,20 @@ namespace MasterServer.ServerSide.MasterServer
             _packet.Write(_username);
             _packet.Write(_token);
             _packet.Write(Globals.GameServerIp);
-            _packet.Write(Globals.GameServerClientPort);
+            _packet.Write(Globals.GameServerPort);
             
+            SendTcpData(_toClient, _packet);
+        }
+
+        public static void RegisterSuccess(int _toClient)
+        {
+            using var _packet = new Packet((int)MasterToClient.RegisterSuccess);
+            SendTcpData(_toClient, _packet);
+        }
+
+        public static void RegisterFailed(int _toClient)
+        {
+            using var _packet = new Packet((int)MasterToClient.RegisterFailed);
             SendTcpData(_toClient, _packet);
         }
 
@@ -43,5 +57,18 @@ namespace MasterServer.ServerSide.MasterServer
         }
 
         #endregion
+
+        public static void ScoreTable(int _toClient, List<BsonDocument> _playersData)
+        {
+            using var _packet = new Packet((int)MasterToClient.ScoreTable);
+            
+            _packet.Write(_playersData.Count);
+            foreach (var _player in _playersData)
+            {
+                _packet.Write(_player.GetValue("username").AsString);
+                _packet.Write(_player.GetValue("score").AsInt32);
+            }
+            SendTcpData(_toClient, _packet);
+        }
     }
 }

@@ -2,7 +2,6 @@
 using System.Threading;
 using MasterServer.Database;
 using MasterServer.ServerSide.GameServer;
-using MasterServer.ServerSide.Lobby;
 using MasterServer.ServerSide.MasterServer;
 using MasterServer.Threading;
 
@@ -14,7 +13,7 @@ namespace MasterServer
 
         public static void Main()
         {
-            GameServerConn.CreateInstance(Globals.GameServerIp, Globals.GameServerMasterPort);
+            GameServerConn.CreateInstance(Globals.GameServerIp, Globals.GameServerPort);
             
             GameServerConn.Instance.OnConnected += (_sender, _args) =>
             {
@@ -27,8 +26,7 @@ namespace MasterServer
             };
             
             GameServerConn.Instance.Start();
-
-
+            
             _isRunning = true;
             MongoCrud.Connect(Globals.MongoUri, Globals.DatabaseName, Globals.CollectionName);
             
@@ -36,11 +34,9 @@ namespace MasterServer
             _mainThread.Start();
 
             Server.Start(1337);
+            _mainThread.Join();
         }
-
-        // Yeni oluşturulan lobby'yi game server'a haber et
-
-
+        
         private static void MainThread()
         {
             Console.WriteLine($"Main thread started. Running at {Constants.TicksPerSec} ticks per second.");
@@ -51,10 +47,10 @@ namespace MasterServer
                 while (_nextLoop < DateTime.Now)
                 {
                     ThreadManager.UpdateMain();
-                    _nextLoop = _nextLoop.AddMilliseconds(Constants.MsPerTick); // Calculate at what point in time the next tick should be executed
+                    _nextLoop = _nextLoop.AddMilliseconds(Constants.MsPerTick);
 
                     if (_nextLoop > DateTime.Now)
-                        Thread.Sleep(_nextLoop - DateTime.Now); // Let the thread sleep until it's needed again.
+                        Thread.Sleep(_nextLoop - DateTime.Now);
                 }
             }
         }

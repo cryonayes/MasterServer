@@ -1,20 +1,34 @@
 using System;
 using MasterServer.Common;
-using MasterServer.ServerSide.Lobby;
+using MasterServer.Database.Helpers;
 
 namespace MasterServer.ServerSide.GameServer;
 
-// GameServer tarafından gelen verileri işlemek için gereken fonksiyonlar
 public static class GameServerHandle
 {
     public static void Welcome(Packet _packet)
     {
-        Console.WriteLine("Game Server bize cevap verdi woah");
+        var _myId = _packet.ReadInt();
+        Console.WriteLine($"MasterServer Client ID: {_myId}");
     }
 
     public static void LobbyIsReady(Packet _packet)
     {
         var _ready = _packet.ReadString();
-        var _lobby = LobbyManager.GetInstance().GetLobbyById(_ready);
+        Console.WriteLine($"Lobby ID {_ready} is ready.");
+    }
+
+    public static void PlayerConnected(Packet _packet)
+    {
+        var _playerId = _packet.ReadInt();
+        Console.WriteLine($"Player {_playerId} is connected");
+        Globals.GameServerPlayerCount += 1;
+    }
+
+    public static void PlayerDisconnected(Packet _packet)
+    {
+        var _playerId = _packet.ReadInt();
+        Console.WriteLine($"Player {_playerId} is disconnected");
+        Globals.GameServerPlayerCount -= 1;
     }
 }
